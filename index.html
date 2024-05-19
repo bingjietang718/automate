@@ -137,10 +137,10 @@
 </section>
 
 
-<!-- <section class="hero teaser">
+<section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <div class="columns is-centered">
+      <!-- <div class="columns is-centered">
         <div class="column">
           <video id="teaser" autoplay muted loop playsinline width="100%">
             <source src="./static/videos/teaser_tactile_insertion_in_the_dark.mp4"
@@ -153,13 +153,15 @@
                     type="video/mp4">
           </video>
         </div>
-      </div>
+      </div> -->
+      <img src="static/images/sim_20.gif" width="100%">
+      <img src="static/images/real_20.gif" width="100%">
       <h2 class="subtitle has-text-centered">
-        <span class="dnerf">TacSL</span> policies demonstrate robustness to physical disturbances and acute illumination changes.
+        AutoMate policies deployment in simulation and reality (unique assembly IDs on top).
       </h2>
     </div>
   </div>
-</section> -->
+</section>
 
 
 <!-- <embed src="static/images/teaser.pdf" style="width:100%;" frameborder="0"></embed> -->
@@ -210,6 +212,38 @@
       </p>
       <img src="static/images/asset_lookup_table.png" width="100%">
     </div>
+    <div class="content has-text-justified">
+      <p>
+        We train a PointNet-based 3D auto-encoder to learn a latent representation of assembly geometry and use t-SNE to reduce the dimensionality of learned representations for each assembly. Here we plot the lower-dimensional representation of all 100 assemblies and visualize the 20 assemblies we randomly selected for real-world deployment.
+      </p>
+      <img src="static/images/selected_assembly_vis.png" width="100%">
+      <!-- <iframe src="./static/videos/selected_assembly_vis.m4v"
+                  width="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> -->
+    </div>
+  </div>
+</section>
+
+<section class="section" id="Environment">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Experiment Setup</h2>
+    <h3 class="title">Robot</h3>
+    <p>
+      Our experiment setup in both simulation (left) and reality (right) is shown below. 
+    </p>
+    <div class="columns is-centered">
+      <div class="column">
+        <img src="static/images/sim_robot_setup.png" width="100%">
+      </div>
+      <div class="column">
+        <img src="static/images/real_robot_setup.png" width="100%">
+      </div>
+    </div>
+    <h3 class="title">Perception</h3>
+    <img src="static/images/perception_pipeline.png" width="100%">
+    <p>
+      Our perception pipeline in reality is based on <a href="https://github.com/facebookresearch/segment-anything">Segment Anything (SAM)</a> and <a href="https://nvlabs.github.io/FoundationPose/">FoundationPose</a>. To estimate the plug or socket pose, the wrist-mounted <a href="https://www.intelrealsense.com/depth-camera-d435/">Intel RealSense D435 RGB-D camera</a> first captures an RGB image and a depth image. The RGB image is shown to the user, who clicks on the plug or socket of interest. The RGB image and pixel coordinates from user clicks are then passed through SAM and SAM outputs a segmentation mask for the plug or socket. The RGB image, depth image, segmentation mask and CAD model for the plug or socket are passed through FoundationPose to estimate the 6-DoF pose in the camera frame. Finally, we convert the pose to the robot frame using robot kinematics and camera extrinsics.
+    </p>
+    
   </div>
 </section>
 
