@@ -1,14 +1,14 @@
-# Nerfies
+# AutoMate
 
-This is the repository that contains source code for the [Nerfies website](https://nerfies.github.io).
+This is the repository that contains source code for the [AutoMate website](https://bingjietang718.github.io/automate/).
 
-If you find Nerfies useful for your work please cite:
+If you find AutoMate useful for your work please cite:
 ```
-@article{park2021nerfies
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
+@inproceedings{tang2024automate,
+  author    = {Tang, Bingjie and Akinola, Iretiayo and Xu, Jie and Wen, Bowen and Handa, Ankur and Van Wyk, Karl and Fox, Dieter and S. Sukhatme, Gaurav and Ramos, Fabio and Yashraj, Narang},
+  title     = {AutoMate: Specialist and Generalist Assembly Policies over Diverse Geometries},
+  booktitle = {Robotics: Science and Systems},
+  year      = {2024},
 }
 ```
 
