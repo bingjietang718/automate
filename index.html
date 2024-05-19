@@ -207,12 +207,14 @@
   <div class="container is-max-desktop content">
     <h2 class="title">Dataset</h2>
     <div class="content has-text-justified">
+      <h4 class="title">Assembly Visualization</h4>
       <p>
         For each assembly in our dataset, we provide its unique ID and a rendering. 
       </p>
       <img src="static/images/asset_lookup_table.png" width="100%">
     </div>
     <div class="content has-text-justified">
+      <h4 class="title">Selected Assemblies for Real-world Deployment</h4>
       <p>
         We train a PointNet-based 3D auto-encoder to learn a latent representation of assembly geometry and use t-SNE to reduce the dimensionality of learned representations for each assembly. Here we plot the lower-dimensional representation of all 100 assemblies and visualize the 20 assemblies we randomly selected for real-world deployment.
       </p>
@@ -226,7 +228,7 @@
 <section class="section" id="Environment">
   <div class="container is-max-desktop content">
     <h2 class="title">Experiment Setup</h2>
-    <h3 class="title">Robot</h3>
+    <h4 class="title">Robot</h4>
     <p>
       Our experiment setup in both simulation (left) and reality (right) is shown below. 
     </p>
@@ -238,12 +240,13 @@
         <img src="static/images/real_robot_setup.png" width="100%">
       </div>
     </div>
-    <h3 class="title">Perception</h3>
-    <img src="static/images/perception_pipeline.png" width="100%">
-    <p>
-      Our perception pipeline in reality is based on <a href="https://github.com/facebookresearch/segment-anything">Segment Anything (SAM)</a> and <a href="https://nvlabs.github.io/FoundationPose/">FoundationPose</a>. To estimate the plug or socket pose, the wrist-mounted <a href="https://www.intelrealsense.com/depth-camera-d435/">Intel RealSense D435 RGB-D camera</a> first captures an RGB image and a depth image. The RGB image is shown to the user, who clicks on the plug or socket of interest. The RGB image and pixel coordinates from user clicks are then passed through SAM and SAM outputs a segmentation mask for the plug or socket. The RGB image, depth image, segmentation mask and CAD model for the plug or socket are passed through FoundationPose to estimate the 6-DoF pose in the camera frame. Finally, we convert the pose to the robot frame using robot kinematics and camera extrinsics.
-    </p>
-    
+    <div class="content has-text-justified">
+      <h4 class="title">Perception</h4>
+      <p>
+        Our perception pipeline in reality is based on <a href="https://github.com/facebookresearch/segment-anything">Segment Anything (SAM)</a> and <a href="https://nvlabs.github.io/FoundationPose/">FoundationPose</a>. To estimate the plug or socket pose, the wrist-mounted <a href="https://www.intelrealsense.com/depth-camera-d435/">Intel RealSense D435 RGB-D camera</a> first captures an RGB image and a depth image. The RGB image is shown to the user, who clicks on the plug or socket of interest. The RGB image and pixel coordinates from user clicks are then passed through SAM and SAM outputs a segmentation mask for the plug or socket. The RGB image, depth image, segmentation mask and CAD model for the plug or socket are passed through FoundationPose to estimate the 6-DoF pose in the camera frame. Finally, we convert the pose to the robot frame using robot kinematics and camera extrinsics.
+      </p>
+      <img src="static/images/perception_pipeline.png" width="100%">
+    </div>
   </div>
 </section>
 
