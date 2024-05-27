@@ -22,6 +22,12 @@
     gtag('config', 'G-PYVRSFMDRL');
   </script>
    -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript"
+          src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
         rel="stylesheet">
@@ -207,28 +213,97 @@
   <div class="container is-max-desktop content">
     <h2 class="title">Dataset</h2>
     <div class="content has-text-justified">
-      <h4 class="title">Assembly Visualization</h4>
+      <!-- <h4 class="title">Assembly Visualization</h4> -->
       <p>
-        For each assembly in our dataset, we provide its unique ID and a rendering. 
+        We provide a dataset of 100 assemblies compatible with simulation and 3D printable in the real world and parallelized simulation environments for all 100 assemblies. For each assembly in our dataset, we show its unique ID and a rendering. 
       </p>
       <img src="static/images/asset_lookup_table.png" width="100%">
     </div>
-    <div class="content has-text-justified">
+    <!-- <div class="content has-text-justified">
       <h4 class="title">Selected Assemblies for Real-world Deployment</h4>
       <p>
         We train a PointNet-based 3D auto-encoder to learn a latent representation of assembly geometry and use t-SNE to reduce the dimensionality of learned representations for each assembly. Here we plot the lower-dimensional representation of all 100 assemblies and visualize the 20 assemblies we randomly selected for real-world deployment.
       </p>
       <img src="static/images/selected_assembly_vis.png" width="100%">
-      <!-- <iframe src="./static/videos/selected_assembly_vis.m4v"
-                  width="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> -->
+      <iframe src="./static/videos/selected_assembly_vis.m4v"
+                  width="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> 
+     </div> --> 
+  </div>
+</section>
+
+<section class="section" id="Specialist">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Training Specialist (Part-specific) Policies</h2>
+    <div class="content has-text-justified">
+      <p>
+        To train specialist policies, we propose a novel approach that combines 3 distinct algorithms:
+        <ul>
+          <li>assembly-by-disassembly,</li>
+          <li>reinforcement learning with an imitation objective,</li>
+          <li>and dynamic time warping.</li>
+        </ul>  
+      </p>
+
+      <h4 class="title">Assembly-by-Disassembly</h4>
+      <p>As the kinematics of assembly are a narrow passage problem, collecting human demonstrations and using motion planners are both difficult. So, we collect demonstration for disassembly instead and reverse the disassembly paths for assembly:
+        <ul>
+          <li><b>(A)</b> command the robot to grasp the plug using a low-level controller, </li>
+          <li><b>(B)</b> lift the plug from the socket and move to a randomized pose, </li>
+          <li><b>(C)</b> repeating the process for additional poses, </li>
+          <li><b>(D)</b> collecting 100 successful disassembly paths. </li>
+        </ul>  
+      </p>
+      <center><img src="static/images/disassembly_traj_generation.png" width="80%"></center><br>
+
+      <h4 class="title">Reinforcement Learning with an Imitation Objective</h4>
+      <p>
+        We formulate the robotic assembly problem as a Markov decision process and use proximal policy optimization to learn the policy and an approximation of the value function. Inspired by <a href="https://xbpeng.github.io/projects/DeepMimic/index.html">DeepMimic</a>, for locomotion, we augment RL with demonstrations by directly using an imitation reward term $R_t^I$. Our baseline reward $R_t^B$ is based on our prior work <a href="https://sites.google.com/nvidia.com/industreal">IndustReal</a>. 
+      </p>
+      <center>$R_t = \omega^B R_t^B + \omega^I R_t^I$</center><br>
+      <p>
+        We define the per-timestep imitation reward $R_t^I$ as the maximum reward over all demonstrations for the given assembly. 
+      </p>
+      <center>$R_t^I = \max_{i=1,...,M} R^{I_i}_t$</center><br>
+      <p>
+        where $M=100$ is the number of demonstrations.
+      </p>
+
+      <h4 class="title"><a href="https://ieeexplore.ieee.org/document/1163055">Dynamic Time Warping (DTW)</a> for Trajectory Matching</h4>
+      <p>
+        In our simulator, for a given path, the arc length between consecutive points is a function of the instantaneous velocity, resulting in disparate discretizations between robot end-effector paths and the collected demonstration paths. So we need to find a distance metric between paths that is insensitive to speed or sampling rate. 
+      </p>
+      <p>
+        At each timestep, given an end-effector path, DTW uses dynamic programming to find a mapping between the end-effector path and each demonstration path that minimizes the sum of Euclidean distances between matching points. Here we show a visualization of the mapping between the end-effector path and a demonstration path by DTW.
+      </p>
+      <img src="static/images/dtw.png" width="100%"><br>
+      <p>
+        Finally, we define $R_t^{I_i} = 1-\tanh(D^{min})$.
+      </p>
     </div>
   </div>
 </section>
 
-<section class="section" id="Environment">
+<section class="section" id="Generalist">
   <div class="container is-max-desktop content">
-    <h2 class="title">Experiment Setup</h2>
-    <h4 class="title">Robot</h4>
+    <h2 class="title">Training Generalist (Unified) Policies</h2>
+    <div class="content has-text-justified">
+      <p>
+        When training generalist, we aim to reuse knowledge from already-trained specialists with a simple 2-stage policy distillation procedure:
+        <ul>
+          <li>First, we use standard behavior cloning on the specialists.</li>
+          <li>Then, we use <a href="https://proceedings.mlr.press/v15/ross11a.html">DAgger</a> to reduce covariate shifts by executing the generalist policy and querying the specialists under the induced state distributions. </li>
+        </ul>
+        Finally, we perform a RL fine-tuning phase on the generalist policy. During the fine-tuning phase, we apply the sampling-based curriculum from our previous work <a href="https://sites.google.com/nvidia.com/industreal">IndustReal</a>.
+      </p>
+      <img src="static/images/generalist_methods.png" width="100%"><br>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="Sim-to-real">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Sim-to-Real Transfer</h2>
+    <!-- <h4 class="title">Experiment Setup</h4>
     <p>
       Our experiment setup in both simulation (left) and reality (right) is shown below. 
     </p>
@@ -239,9 +314,17 @@
       <div class="column">
         <img src="static/images/real_robot_setup.png" width="100%">
       </div>
-    </div>
+    </div> -->
     <div class="content has-text-justified">
-      <h4 class="title">Perception</h4>
+      <p>
+        We deploy our specialist policies over 20 assemblies and 200 trials and our generalist policy on the same set of 20 assemblies under the same experimental conditions. We show the per-assembly success rate in the real world compared to the simulation analogue below. The specialist and generalist policy evaluation results have shown that our simulated training conditions are sufficiently adverse to train robust and performant policies that can be transferred to the real world.
+      </p>
+      <img src="static/images/sim_real_eval.png" width="100%"><br><br>
+      <p>
+        We also evaluate our specialist and generalist policies as part of a <b>perception-initialized assembly workflow</b>. For 5 distinct assemblies, we deploy the corresponding specialist and one generalist policy, for a total of 100 trials. The specialist mean success rate is 90.0% and the generalist mean success rate is 86%. These results indicate that 6-DOF pose estimation, grasp optimization, and our proposed methods for learning specialist and generalist policies can be effectively combined to achieve reliable assembly under realistic conditions using research-grade hardware.
+      </p>
+      <img src="static/images/perception_initialized_workflow.png" width="100%"><br><br>
+      <!-- <h4 class="title">Perception</h4> -->
       <p>
         Our perception pipeline in reality is based on <a href="https://github.com/facebookresearch/segment-anything">Segment Anything (SAM)</a> and <a href="https://nvlabs.github.io/FoundationPose/">FoundationPose</a>. To estimate the plug or socket pose, the wrist-mounted <a href="https://www.intelrealsense.com/depth-camera-d435/">Intel RealSense D435 RGB-D camera</a> first captures an RGB image and a depth image. The RGB image is shown to the user, who clicks on the plug or socket of interest. The RGB image and pixel coordinates from user clicks are then passed through SAM and SAM outputs a segmentation mask for the plug or socket. The RGB image, depth image, segmentation mask and CAD model for the plug or socket are passed through FoundationPose to estimate the 6-DoF pose in the camera frame. Finally, we convert the pose to the robot frame using robot kinematics and camera extrinsics.
       </p>
