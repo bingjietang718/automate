@@ -92,7 +92,7 @@
 
           <div class="is-size-5 publication-authors">
             <span class="author-block"><sup>1</sup>University of Southern California,</span>
-            <span class="author-block"><sup>2</sup>NVIDIA Research,</span>
+            <span class="author-block"><sup>2</sup>NVIDIA Corporation,</span>
             <span class="author-block"><sup>3</sup>University of Washington,</span>
             <span class="author-block"><sup>4</sup>University of Sydney</span>
           </div>
@@ -168,7 +168,7 @@
       <img src="static/images/sim_20.gif" width="100%">
       <img src="static/images/real_20.gif" width="100%">
       <h2 class="subtitle has-text-centered">
-        AutoMate policies deployment in simulation and reality (unique assembly IDs on top).
+        Deployment of AutoMate policies in simulation and reality (unique assembly IDs on top).
       </h2>
     </div>
   </div>
@@ -188,7 +188,7 @@
             Robotic assembly for high-mixture settings requires adaptivity to diverse parts and poses, which is an open challenge. Meanwhile, in other areas of robotics, large models and sim-to-real have led to tremendous progress. 
           </p>
           <p>
-            Inspired by such work, we present <b>AutoMate</b>, a learning framework and system that consists of 4 parts: 1) a dataset of 100 assemblies compatible with simulation and the real world, along with parallelized simulation environments for policy learning, 2) a novel simulation-based approach for learning specialist (i.e., part-specific) policies and generalist (i.e., unified) assembly policies, 3) demonstrations of specialist policies that individually solve 80 assemblies with ≈80%+ success rates in simulation, as well as a generalist policy that jointly solves 20 assemblies with an 80%+ success rate, and 4) zero-shot sim-to-real transfer that achieves similar (or better) performance than simulation, including on end-to-end assembly. 
+            Inspired by such work, we present <b>AutoMate</b>, a learning framework and system that consists of 4 parts: 1) a dataset of 100 assemblies compatible with simulation and the real world, along with parallelized simulation environments for policy learning, 2) a novel simulation-based approach for learning specialist (i.e., part-specific) policies and generalist (i.e., unified) assembly policies, 3) demonstrations of specialist policies that individually solve 80 assemblies with ≈80%+ success rates in simulation, as well as a generalist policy that jointly solves 20 assemblies with an 80%+ success rate, and 4) zero-shot sim-to-real transfer that achieves similar (or better) performance than simulation, including on perception-initialized assembly. 
           </p>
           <p>
             To our knowledge, <b>AutoMate</b> provides the first simulation-based framework for learning specialist and generalist policies over a wide range of assemblies, as well as the first system demonstrating zero-shot sim-to-real transfer over such a range.
@@ -203,19 +203,20 @@
     <!-- Paper video. -->
     <div class="columns is-centered has-text-centered">
       <div class="column">
-        <h2 class="title is-5">Video (7.3 min)</h2>
+        
         <div class="publication-video">
           <iframe src="https://player.vimeo.com/video/911439543?h=8fa5f8134b"
                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
+        <h2 class="title is-5">Video (7.3 min)</h2>
       </div>
       <div class="column">
-        <h2 class="title is-5">Video (18.5 min, Narrated)</h2>
         <div class="publication-video">
           <!-- <iframe src="https://player.vimeo.com/video/911439543?h=8fa5f8134b"
                   frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe> -->
           <iframe src="https://player.vimeo.com/video/951371624?h=c1c7712dae&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write" style="position:absolute;top:0;left:0;width:100%;height:100%;" title="AutoMate (Narrated)"></iframe>
         </div>
+        <h2 class="title is-5">Video (18.5 min, Narrated)</h2>
       </div>
     </div>
     <!--/ Paper video. -->
@@ -228,7 +229,7 @@
     <div class="content has-text-justified">
       <!-- <h4 class="title">Assembly Visualization</h4> -->
       <p>
-        We provide a dataset of 100 assemblies compatible with simulation and 3D printable in the real world and parallelized simulation environments for all 100 assemblies. For each assembly in our dataset, we show its unique ID and a rendering. 
+        We provide a dataset of 100 assemblies compatible with simulation and 3D printable in the real world, as well as parallelized simulation environments for all 100 assemblies. For each assembly in our dataset, we show its unique ID and a rendering. 
       </p>
       <img src="static/images/asset_lookup_table.png" width="100%">
     </div>
@@ -258,19 +259,19 @@
       </p>
 
       <h4 class="title">Assembly-by-Disassembly</h4>
-      <p>As the kinematics of assembly are a narrow passage problem, collecting human demonstrations and using motion planners are both difficult. So, we collect demonstration for disassembly instead and reverse the disassembly paths for assembly:
+      <p>As the kinematics of assembly are a narrow passage problem, collecting human demonstrations and using motion planners are both difficult. Therefore, we collect demonstration for disassembly instead and reverse the disassembly paths for assembly:
         <ul>
           <li><b>(A)</b> command the robot to grasp the plug using a low-level controller, </li>
           <li><b>(B)</b> lift the plug from the socket and move to a randomized pose, </li>
-          <li><b>(C)</b> repeating the process for additional poses, </li>
-          <li><b>(D)</b> collecting 100 successful disassembly paths. </li>
+          <li><b>(C)</b> repeat the process for additional poses, </li>
+          <li><b>(D)</b> collect 100 successful disassembly paths. </li>
         </ul>  
       </p>
       <center><img src="static/images/disassembly_traj_generation.png" width="80%"></center><br>
 
       <h4 class="title">Reinforcement Learning with an Imitation Objective</h4>
       <p>
-        We formulate the robotic assembly problem as a Markov decision process and use proximal policy optimization to learn the policy and an approximation of the value function. Inspired by <a href="https://xbpeng.github.io/projects/DeepMimic/index.html">DeepMimic</a>, for locomotion, we augment RL with demonstrations by directly using an imitation reward term $R_t^I$. Our baseline reward $R_t^B$ is based on our prior work <a href="https://sites.google.com/nvidia.com/industreal">IndustReal</a>. 
+        We formulate the robotic assembly problem as a Markov decision process and use proximal policy optimization to learn the policy and an approximation of the value function. We found the RL-only approach proposed in our previous work <a href="https://sites.google.com/nvidia.com/industreal">IndustReal</a> is ineffective. Inspired by <a href="https://xbpeng.github.io/projects/DeepMimic/index.html">DeepMimic</a>, for locomotion, we augment RL with demonstrations by directly using an imitation reward term $R_t^I$. Our baseline reward $R_t^B$ is based on our prior work <a href="https://sites.google.com/nvidia.com/industreal">IndustReal</a>. 
       </p>
       <center>$R_t = \omega^B R_t^B + \omega^I R_t^I$</center><br>
       <p>
@@ -278,7 +279,7 @@
       </p>
       <center>$R_t^I = \max_{i=1,...,M} R^{I_i}_t$</center><br>
       <p>
-        where $M=100$ is the number of demonstrations.
+        where $M=100$ is the number of demonstrations. Conceptually, we match the current robot end-effector path with the closest demonstration path and compute imitation reward based on the distance between these two paths. 
       </p>
 
       <h4 class="title"><a href="https://ieeexplore.ieee.org/document/1163055">Dynamic Time Warping (DTW)</a> for Trajectory Matching</h4>
@@ -301,7 +302,7 @@
     <h2 class="title">Training Generalist (Unified) Policies</h2>
     <div class="content has-text-justified">
       <p>
-        When training generalist, we aim to reuse knowledge from already-trained specialists with a simple 2-stage policy distillation procedure:
+        When training a generalist, we aim to reuse knowledge from already-trained specialists with a simple 2-stage policy distillation procedure:
         <ul>
           <li>First, we use standard behavior cloning on the specialists.</li>
           <li>Then, we use <a href="https://proceedings.mlr.press/v15/ross11a.html">DAgger</a> to reduce covariate shifts by executing the generalist policy and querying the specialists under the induced state distributions. </li>
@@ -330,7 +331,10 @@
     </div> -->
     <div class="content has-text-justified">
       <p>
-        We deploy our specialist policies over 20 assemblies and 200 trials and our generalist policy on the same set of 20 assemblies under the same experimental conditions. We show the per-assembly success rate in the real world compared to the simulation analogue below. The specialist and generalist policy evaluation results have shown that our simulated training conditions are sufficiently adverse to train robust and performant policies that can be transferred to the real world.
+        We deploy our specialist policies over 20 assemblies and 200 trials and our generalist policy on the same set of 20 assemblies under the same experimental conditions. In these <b>policy-only</b> evaluations, we place the robot in lead-through, manually grasp a plug, and guide it into the socket. We then programmatically lift the plug until free from contact; apply perturbations and observation noise; and deploy a policy. 
+      </p>
+      <p>
+        We show the per-assembly success rate in the real world compared to the simulation analogue below. The specialist and generalist policy evaluation results have shown that our simulated training conditions are sufficiently adverse to train robust and performant policies that can be transferred to the real world.
       </p>
       <img src="static/images/sim_real_eval.png" width="100%"><br><br>
       <p>
@@ -338,11 +342,18 @@
       </p>
       <img src="static/images/perception_initialized_workflow.png" width="100%"><br><br>
       <!-- <h4 class="title">Perception</h4> -->
-      <p>
+      
+    </div>
+  </div>
+</section>
+
+<section class="section" id="Perception">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Additional Detail: Perception Pipeline</h2>
+    <p>
         Our perception pipeline in reality is based on <a href="https://github.com/facebookresearch/segment-anything">Segment Anything (SAM)</a> and <a href="https://nvlabs.github.io/FoundationPose/">FoundationPose</a>. To estimate the plug or socket pose, the wrist-mounted <a href="https://www.intelrealsense.com/depth-camera-d435/">Intel RealSense D435 RGB-D camera</a> first captures an RGB image and a depth image. The RGB image is shown to the user, who clicks on the plug or socket of interest. The RGB image and pixel coordinates from user clicks are then passed through SAM and SAM outputs a segmentation mask for the plug or socket. The RGB image, depth image, segmentation mask and CAD model for the plug or socket are passed through FoundationPose to estimate the 6-DoF pose in the camera frame. Finally, we convert the pose to the robot frame using robot kinematics and camera extrinsics.
       </p>
       <img src="static/images/perception_pipeline.png" width="100%">
-    </div>
   </div>
 </section>
 
@@ -351,7 +362,7 @@
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <pre><code>@inproceedings{tang2024automate,
-  author    = {Tang, Bingjie and Akinola, Iretiayo and Xu, Jie and Wen, Bowen and Handa, Ankur and Van Wyk, Karl and Fox, Dieter and S. Sukhatme, Gaurav and Ramos, Fabio and Yashraj, Narang},
+  author    = {Tang, Bingjie and Akinola, Iretiayo and Xu, Jie and Wen, Bowen and Handa, Ankur and Van Wyk, Karl and Fox, Dieter and S. Sukhatme, Gaurav and Ramos, Fabio and Narang, Yashraj},
   title     = {AutoMate: Specialist and Generalist Assembly Policies over Diverse Geometries},
   booktitle = {Robotics: Science and Systems},
   year      = {2024},
